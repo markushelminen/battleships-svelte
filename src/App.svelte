@@ -1,14 +1,17 @@
 <script>
-  import GameGrid from "./lib/GameGrid.svelte";
+    import GameGrid from "./lib/GameGrid.svelte";
 </script>
 
 <main>
-  <h1>Battle Ships</h1>
-  <i>a thesis by Markus Helminen</i>
-  <div class="card">
+    <h1>Battle Ships</h1>
+    <i>a thesis by Markus Helminen</i>
     <GameGrid />
-  </div>
+    <div class="p-4" />
+    <i>sourcecode available on <a href="https://github.com/markushelminen/battleships-svelte">github</a></i>
 </main>
 
 <style>
+    .p-4 {
+        padding: 24px;
+    }
 </style>
