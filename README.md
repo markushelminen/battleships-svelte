@@ -48,7 +48,5 @@ export default writable(0);
 
 ## TODO
 
--   fire computer boats
--   computer fires back
+-   computer fires but only randomly. Where's the AI?
 -   win condition
--   cross out boats that are hit

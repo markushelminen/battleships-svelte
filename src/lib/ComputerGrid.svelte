@@ -1,11 +1,16 @@
 <script>
-    import { onDestroy } from "svelte";
-    import { shootPlayer } from "./AIFireService";
+    import { computerCellToShoot } from "./AIFireService";
     import ComputerCell from "./ComputerCell.svelte";
     import { getEnemyFleet } from "./ComputerService";
-    import { computerGrid } from "./stores";
+    import { computerGrid, playerGrid } from "./stores";
 
     export let started;
+
+    let orientationCounter = 0;
+    let lastShotLandedCount = 0;
+    let lastShotCell = -1;
+    let firstBoatCell = -1;
+    let computerFiredShots = [];
 
     export function reset() {
         console.log("restart");
@@ -13,7 +18,36 @@
     }
 
     function onFire() {
-        shootPlayer();
+        if (orientationCounter === 0 && lastShotLandedCount === 0) {
+            firstBoatCell = -1;
+        }
+        let firedCellNumber = -1;
+        [firedCellNumber, orientationCounter] = computerCellToShoot(
+            $playerGrid,
+            lastShotLandedCount,
+            lastShotCell,
+            firstBoatCell,
+            orientationCounter
+        );
+
+        console.log("Number: " + firedCellNumber);
+
+        playerGrid.update((grid) => {
+            grid[firedCellNumber].clicked = true;
+            return grid;
+        });
+
+        if (playerGrid[firedCellNumber].boat === true) {
+            if (orientationCounter === 0) {
+                orientationCounter = 1;
+                firstBoatCell = firedCellNumber;
+            }
+            lastShotLandedCount++;
+            lastShotCell = firedCellNumber;
+        } else {
+            lastShotLandedCount = 0;
+        }
+        computerFiredShots.push(firedCellNumber);
     }
 </script>
 

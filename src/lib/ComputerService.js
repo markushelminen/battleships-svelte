@@ -75,6 +75,6 @@ function randomCell(boat, grid) {
  * @param {number} min
  * @param {number} max
  */
-function randomIntFromInterval(min, max) {
+export function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
