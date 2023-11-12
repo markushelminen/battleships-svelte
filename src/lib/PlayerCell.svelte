@@ -46,9 +46,6 @@
 </div>
 
 <style>
-    p {
-        text-align: center;
-    }
     .cell {
         background-color: whitesmoke;
         width: 50px;
@@ -71,5 +68,8 @@
         background-position: center center;
         background-size: 100% 100%, auto;
         background-color: #dfdfdf;
+    }
+    p {
+        margin: 0px;
     }
 </style>

@@ -15,6 +15,7 @@
 
     function handleClick() {
         if (!started) return;
+        if (cell.clicked) return;
         computerGrid.update((grid) => {
             grid[cell.number].clicked = true;
             return grid;
@@ -40,7 +41,7 @@
 
 <style>
     p {
-        text-align: center;
+        margin: 0px;
     }
     .cell {
         background-color: whitesmoke;

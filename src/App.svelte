@@ -14,4 +14,12 @@
     .p-4 {
         padding: 24px;
     }
+    a {
+        font-weight: 500;
+        color: #496ddb;
+        text-decoration: inherit;
+    }
+    a:hover {
+        color: #717ec3;
+    }
 </style>

@@ -1,10 +1,12 @@
 <script>
+    import { createEventDispatcher } from "svelte";
     import { computerCellToShoot } from "./AIFireService";
     import ComputerCell from "./ComputerCell.svelte";
     import { getEnemyFleet } from "./ComputerService";
     import { computerGrid, playerGrid } from "./stores";
 
     export let started;
+    const dispatch = createEventDispatcher();
 
     let orientationCounter = 0;
     let lastShotLandedCount = 0;
@@ -37,7 +39,7 @@
             return grid;
         });
 
-        if (playerGrid[firedCellNumber].boat === true) {
+        if ($playerGrid[firedCellNumber].boat === true) {
             if (orientationCounter === 0) {
                 orientationCounter = 1;
                 firstBoatCell = firedCellNumber;
@@ -48,6 +50,7 @@
             lastShotLandedCount = 0;
         }
         computerFiredShots.push(firedCellNumber);
+        dispatch("isgameover");
     }
 </script>
 
