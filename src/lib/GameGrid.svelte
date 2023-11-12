@@ -3,7 +3,8 @@
     import PlayerGrid from "./PlayerGrid.svelte";
     let vertical = false;
     let started = false;
-    let restart;
+    let player_reset;
+    let computer_reset;
 
     function canStart(event) {
         console.log(event);
@@ -14,14 +15,15 @@
     function reset() {
         console.log("reset");
         started = false;
-        restart();
+        player_reset();
+        computer_reset();
     }
 </script>
 
 <div class="container">
     <section>
         <h2>Player</h2>
-        <PlayerGrid bind:restart {vertical} {started} on:start={canStart} />
+        <PlayerGrid bind:reset={player_reset} {vertical} {started} on:start={canStart} />
     </section>
     <section class="middle-column">
         {#if started}
@@ -36,7 +38,7 @@
     </section>
     <section>
         <h2>Computer</h2>
-        <ComputerGrid started bind:restart />
+        <ComputerGrid {started} bind:reset={computer_reset} />
     </section>
 </div>
 

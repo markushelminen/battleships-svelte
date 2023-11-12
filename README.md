@@ -48,7 +48,6 @@ export default writable(0);
 
 ## TODO
 
--   start the game
 -   fire computer boats
 -   computer fires back
 -   win condition

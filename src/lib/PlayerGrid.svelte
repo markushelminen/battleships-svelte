@@ -2,16 +2,16 @@
     import { boats, makeEmptyGrid } from "./InitService";
     import { createEventDispatcher } from "svelte";
     import PlayerCell from "./PlayerCell.svelte";
+    import { playerGrid } from "./stores";
     export let started;
     export let vertical;
-    let grid = makeEmptyGrid();
     let boatCounter = boats.length - 1;
     const dispatch = createEventDispatcher();
 
-    export const restart = () => {
-        grid = makeEmptyGrid();
+    export function reset() {
+        playerGrid.set(makeEmptyGrid());
         boatCounter = boats.length - 1;
-    };
+    }
     function addBoatWrapper(event) {
         addBoat(event.detail.cell);
     }
@@ -38,11 +38,11 @@
         for (let i = 0; i < boat.size; i++) {
             if (vertical) {
                 if (cell.number + 10 * (boat.size - 1) > 99) return;
-                if (grid[cell.number + 10 * i].boat) return;
+                if ($playerGrid[cell.number + 10 * i].boat) return;
                 boatIndexes.push(cell.number + 10 * i);
             } else {
                 if (cell.number % 10 > 10 - boat.size) return;
-                if (grid[cell.number + i].boat) return;
+                if ($playerGrid[cell.number + i].boat) return;
                 boatIndexes.push(cell.number + i);
             }
         }
@@ -56,7 +56,10 @@
      */
     function addBoatsToGrid(boatIndexes) {
         for (let i of boatIndexes) {
-            grid[i].boat = true;
+            playerGrid.update((grid) => {
+                grid[i].boat = true;
+                return grid;
+            });
         }
     }
 
@@ -72,13 +75,18 @@
             if (vertical) {
                 if (cell.number + 10 * (boat.size - 1) > 99) return;
                 const index = cell.number + 10 * i;
-                grid[index].hover = true;
+                playerGrid.update((grid) => {
+                    grid[index].hover = true;
+                    return grid;
+                });
             } else {
                 if (cell.number % 10 > 10 - boat.size) return;
-                grid[cell.number + i].hover = true;
+                playerGrid.update((grid) => {
+                    grid[cell.number + i].hover = true;
+                    return grid;
+                });
             }
         }
-        grid = grid;
     }
 
     /**
@@ -92,18 +100,23 @@
             if (vertical) {
                 if (cell.number + 10 * (boat.size - 1) > 99) return;
                 const index = cell.number + 10 * i;
-                grid[index].hover = false;
+                playerGrid.update((grid) => {
+                    grid[index].hover = false;
+                    return grid;
+                });
             } else {
                 if (cell.number % 10 > 10 - boat.size) return;
-                grid[cell.number + i].hover = false;
+                playerGrid.update((grid) => {
+                    grid[cell.number + i].hover = false;
+                    return grid;
+                });
             }
         }
-        grid = grid;
     }
 </script>
 
 <div class="grid">
-    {#each grid as cell (cell.number)}
+    {#each $playerGrid as cell (cell.number)}
         <PlayerCell on:addboat={addBoatWrapper} on:hideboat={hideBoatWrapper} on:showboat={showBoatWrapper} bind:cell />
     {/each}
 </div>
