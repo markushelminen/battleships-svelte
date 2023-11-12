@@ -48,8 +48,8 @@ export default writable(0);
 
 ## TODO
 
--   add boats to computer grid
 -   start the game
 -   fire computer boats
 -   computer fires back
 -   win condition
+-   cross out boats that are hit

@@ -4,12 +4,14 @@
     import PlayerCell from "./PlayerCell.svelte";
     export let started;
     export let vertical;
+    let grid = makeEmptyGrid();
     let boatCounter = boats.length - 1;
-    //let grid = makeEmptyGrid();
     const dispatch = createEventDispatcher();
 
-    let grid = makeEmptyGrid();
-
+    export const restart = () => {
+        grid = makeEmptyGrid();
+        boatCounter = boats.length - 1;
+    };
     function addBoatWrapper(event) {
         addBoat(event.detail.cell);
     }
@@ -20,10 +22,13 @@
         hideBoat(event.detail.cell);
     }
 
+    /** @typedef {{number: number; boat: boolean; clicked: boolean; hover: boolean}} Cell */
+
     /**
-     * @param {{ number: any; boat: any; clicked?: boolean; hover?: boolean; }} cell
+     * @param { Cell } cell
      */
     function addBoat(cell) {
+        console.log(`started: ${started}, boatcounter: ${boatCounter}`);
         if (started) return;
         if (boatCounter === -1) return;
         if (cell.boat) return;
@@ -47,7 +52,7 @@
     }
 
     /**
-     * @param {any[]} boatIndexes
+     * @param {number[]} boatIndexes
      */
     function addBoatsToGrid(boatIndexes) {
         for (let i of boatIndexes) {
@@ -56,7 +61,7 @@
     }
 
     /**
-     * @param {{ number: any; boat?: boolean; clicked?: boolean; hover: any; }} cell
+     * @param {Cell} cell
      */
     function showBoat(cell) {
         if (started) return;
@@ -76,6 +81,9 @@
         grid = grid;
     }
 
+    /**
+     * @param {{ number: number; }} cell
+     */
     function hideBoat(cell) {
         if (started) return;
         if (boatCounter === -1) return;

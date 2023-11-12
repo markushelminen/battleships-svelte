@@ -3,28 +3,29 @@
     import PlayerGrid from "./PlayerGrid.svelte";
     let vertical = false;
     let started = false;
+    let restart;
 
     function canStart(event) {
-        if (event.detail.start) {
-            console.log("start");
+        console.log(event);
+        if (event.detail) {
             started = true;
         }
     }
     function reset() {
         console.log("reset");
-
         started = false;
+        restart();
     }
 </script>
 
 <div class="container">
     <section>
         <h2>Player</h2>
-        <PlayerGrid {vertical} {started} on:start={canStart} />
+        <PlayerGrid bind:restart {vertical} {started} on:start={canStart} />
     </section>
     <section class="middle-column">
         {#if started}
-            <button on:click={reset}>Reset</button>
+            <button class="reset" on:click={reset}>Reset</button>
         {:else}
             <button>Add boats</button>
         {/if}
@@ -35,7 +36,7 @@
     </section>
     <section>
         <h2>Computer</h2>
-        <ComputerGrid />
+        <ComputerGrid started bind:restart />
     </section>
 </div>
 
@@ -53,5 +54,9 @@
     .middle-column {
         display: flex;
         flex-direction: column;
+    }
+
+    .reset {
+        background-color: red;
     }
 </style>

@@ -1,13 +1,18 @@
 <script>
     import ComputerCell from "./ComputerCell.svelte";
-    import { makeEmptyGrid } from "./InitService";
+    import { getEnemyFleet } from "./ComputerService";
 
-    $: grid = makeEmptyGrid();
+    export let started;
+
+    export const restart = () => {
+        grid = getEnemyFleet();
+    };
+    let grid = getEnemyFleet();
 </script>
 
 <div class="grid">
     {#each grid as cell}
-        <ComputerCell {cell} />
+        <ComputerCell started {cell} />
     {/each}
 </div>
 

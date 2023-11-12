@@ -3,8 +3,6 @@
 
     export let cell;
 
-    console.log(cell.hover);
-
     const dispatch = createEventDispatcher();
 
     function handleKeydown(event) {
