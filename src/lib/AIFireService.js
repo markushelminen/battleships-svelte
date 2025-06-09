@@ -1,90 +1,57 @@
 import { randomIntFromInterval } from "./ComputerService";
 
-export function computerCellToShoot(grid, shotsLanded, lastShotCell, firstBoatCell, orientationCounter) {
-    console.log(
-        `shots landed: ${shotsLanded}, last shot shell: ${lastShotCell}, first boat cell shot: ${firstBoatCell}, orientation counter: ${orientationCounter}`
-    );
+export function computerCellToShoot(grid, toFireList) {
     let cellToShoot = 0;
-    if (shotsLanded !== 0 || orientationCounter !== 0) {
-        [cellToShoot, orientationCounter] = getNextOrientationCell(
-            grid,
-            lastShotCell,
-            firstBoatCell,
-            orientationCounter
-        );
+    let newToFireList = [];
+    if (toFireList.length !== 0) {
+        [cellToShoot, newToFireList] = shootNextFromList(grid, toFireList);
     } else {
-        orientationCounter = 0;
         cellToShoot = randomCellToShoot(grid);
     }
     console.log(cellToShoot);
-    return [cellToShoot, orientationCounter];
+    return [cellToShoot, newToFireList];
 }
 
 function randomCellToShoot(grid) {
     let cell = NaN;
     let shotValid = false;
     while (!shotValid) {
-        cell = randomIntFromInterval(0, 99);
-        // Computer shoots only everyother cell to be efficient
-        if (cell % 2 === 0) cell + 1;
+        cell = randomCellNumber();
         if (grid[cell].clicked === false) {
             shotValid = true;
         }
     }
-    console.log("random cell");
-
     return cell;
 }
 
-function getNextOrientationCell(grid, lastShotCell, firstBoatCell, orientationCounter) {
-    let cell = NaN;
-    switch (orientationCounter) {
-        case 1:
-            cell = lastShotCell - 10;
-            break;
-        case 2:
-            cell = lastShotCell + 10;
-            break;
-        case 3:
-            cell = lastShotCell - 1;
-            break;
-        case 4:
-            cell = lastShotCell + 1;
-            break;
+function shootNextFromList(playerGrid, shootList) {
+    let legalShot = false;
+    let cellToShoot = shootList.shift();
+    while (!legalShot) {
+        if (
+            cellToShoot >= 0 &&
+            cellToShoot <= 99 &&
+            playerGrid[cellToShoot] &&
+            playerGrid[cellToShoot].clicked === false
+        ) {
+            legalShot = true;
+        } else if (shootList.length === 0) {
+            cellToShoot = randomCellToShoot(playerGrid);
+        } else {
+            cellToShoot = shootList.shift();
+        }
+    }
 
-        default:
-            orientationCounter = 0;
-            return [randomCellToShoot(grid), orientationCounter];
-    }
-    if (grid[cell] && grid[cell].clicked === false) {
-        return [cell, orientationCounter];
-    }
-    orientationCounter++;
-    return getNextOrientationCell(grid, lastShotCell, firstBoatCell, orientationCounter);
+    return [cellToShoot, shootList];
 }
 
-function shootRestOfTheBoat(grid, lastShotCell, firstBoatCell, orientationCounter) {
-    let offset = getOffset(orientationCounter);
-    if (grid[lastShotCell + offset] && grid[lastShotCell + offset].clicked == false) {
-        return lastShotCell + offset;
-    } else if (grid[lastShotCell + offset].clicked == true) {
-        return shootRestOfTheBoat(grid, lastShotCell + offset, firstBoatCell, orientationCounter);
-    } else {
-        return 69;
-    }
-}
-
-function getOffset(orientationCounter) {
-    switch (orientationCounter) {
-        case 1:
-            return 10;
-        case 2:
-            return -10;
-        case 3:
-            return 1;
-        case 4:
-            return -1;
-        default:
-            return NaN;
-    }
+function randomCellNumber() {
+    const numbers = [
+        1, 3, 5, 7, 9, 10, 12, 14, 16, 18, 21, 23, 25, 27, 29, 30, 32, 34, 36, 38, 41, 43, 45, 47, 49, 50, 52, 54, 56,
+        58, 61, 63, 65, 67, 69, 70, 72, 74, 76, 78, 81, 83, 85, 87, 89, 90, 92, 94, 96, 98,
+    ];
+    const randomIndex = Math.floor(Math.random() * numbers.length);
+    console.log(randomIndex);
+    console.log(numbers[randomIndex]);
+    return numbers[randomIndex];
 }

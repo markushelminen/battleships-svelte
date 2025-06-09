@@ -8,11 +8,8 @@
     export let started;
     const dispatch = createEventDispatcher();
 
-    let orientationCounter = 0;
-    let lastShotLandedCount = 0;
-    let lastShotCell = -1;
-    let firstBoatCell = -1;
     let computerFiredShots = [];
+    let toFireList = [];
 
     export function reset() {
         console.log("restart");
@@ -20,7 +17,7 @@
     }
 
     function onFire() {
-        if (orientationCounter === 0 && lastShotLandedCount === 0) {
+        /*if (orientationCounter === 0 && lastShotLandedCount === 0) {
             firstBoatCell = -1;
         }
         let firedCellNumber = -1;
@@ -32,6 +29,13 @@
             orientationCounter
         );
 
+        */
+        let firedCellNumber = -1;
+        console.log(toFireList);
+        [firedCellNumber, toFireList] = computerCellToShoot(
+            $playerGrid,
+            toFireList
+        );
         console.log("Number: " + firedCellNumber);
 
         playerGrid.update((grid) => {
@@ -39,15 +43,12 @@
             return grid;
         });
 
+        // Add boat neighbors to the list of potential boats
         if ($playerGrid[firedCellNumber].boat === true) {
-            if (orientationCounter === 0) {
-                orientationCounter = 1;
-                firstBoatCell = firedCellNumber;
-            }
-            lastShotLandedCount++;
-            lastShotCell = firedCellNumber;
-        } else {
-            lastShotLandedCount = 0;
+            toFireList.push(firedCellNumber + 1);
+            toFireList.push(firedCellNumber - 1);
+            toFireList.push(firedCellNumber + 10);
+            toFireList.push(firedCellNumber - 10);
         }
         computerFiredShots.push(firedCellNumber);
         dispatch("isgameover");

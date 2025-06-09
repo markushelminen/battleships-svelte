@@ -48,5 +48,4 @@ export default writable(0);
 
 ## TODO
 
--   computer fires but only randomly. Where's the AI?
 -   some kind of responsivity

@@ -39,7 +39,7 @@ function randomCell(boat, grid) {
     let illegalPlacement = true;
     let randomCellNumber = 0;
     while (illegalPlacement) {
-        randomCellNumber = randomIntFromInterval(1, 99);
+        randomCellNumber = randomIntFromInterval(0, 99);
         if (boat.vertical) {
             if (randomCellNumber + (boat.size - 1) * 10 < 99) {
                 for (let j = 0; j < boat.size; j++) {
